@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t tarunsuneja/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true tarunsuneja/react-test npm test
+
+after_success:
+  - docker build -t tarunsuneja/learn-multi-client ./client
+  - docker build -t tarunsuneja/learn-multi-server ./server
+  - docker build -t tarunsuneja/learn-multi-nginx ./nginx
+  - docker build -t tarunsuneja/learn-multi-worker ./worker
+
+  # Login to Docker CLI
+  - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_ID" --password-stdin
+
+  # Take those images and push to docker hub
+  - docker push tarunsuneja/learn-multi-client
+  - docker push tarunsuneja/learn-multi-server
+  - docker push tarunsuneja/learn-multi-nginx
+  - docker push tarunsuneja/learn-multi-worker
