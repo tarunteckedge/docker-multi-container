@@ -19,7 +19,6 @@ function App() {
           >
             Learn React
           </a>
-          <h2> Fib Calculator</h2>
 
           <Link to="/">Home</Link>
           <Link to="/otherpage">Other Page</Link>
